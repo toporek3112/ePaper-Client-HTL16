@@ -1,13 +1,18 @@
 import requests, shutil, netifaces
-netifaces.ifaddresses('eth0')
-ip = netifaces.ifaddresses('eth0')[netifaces.AF_INET][0]['addr']
-mac = netifaces.ifaddresses('eth0')[netifaces.AF_LINK][0]['addr']
+netifaces.ifaddresses('enp0s3')
+ip = netifaces.ifaddresses('enp0s3')[netifaces.AF_INET][0]['addr']
+mac = netifaces.ifaddresses('enp0s3')[netifaces.AF_LINK][0]['addr']
 print(ip)
 print(mac)
 
-# payload = { "macAdd": , "ipAdd": }
-# url = 'https://127.0.0.1:4000/ePaper/database/timetable/FF:AA:FF:FF:FA:BF'
+payload = { "macAdd": mac, "ipAdd": ip}
+url = 'https://172.16.34.239:4000/ePaper/database/authenticate'
+r = requests.post(url, json=payload, verify=False)
 
+print(r.text)
+
+# wait for 2 minutes after message: wait
+# send timetable request, if "not authenticated" resend /authenticate
 
 
 # def download_file(url):
