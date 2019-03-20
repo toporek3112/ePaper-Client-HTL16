@@ -39,4 +39,3 @@ while True:
                         authentication_request = requests.post("%s/authenticate"%(url), data={"macAdd": getMac(), "ipAdd": getIp()}, verify=False)
                         print('authentication ');
                         time.sleep(120)
-        
