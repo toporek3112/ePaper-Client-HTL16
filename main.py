@@ -1,5 +1,3 @@
-# import requests, shutil, netifaces
-
 import time, socket, socket, requests, shutil, uuid
 
 url = 'https://127.0.0.1:4000/ePaper/database/'
@@ -27,15 +25,16 @@ def getMac():
 
 while True:
 
-        timetable_request = requests.get("%s/timetable/%s"%(url, getMac()), stream=True, verify=False)
-        with open('./Timetable.bmp', 'wb') as f:
-                if timetable_request.status_code != 401:
-                        timetable_request.raw.decode_content = True
-                        shutil.copyfileobj(timetable_request.raw, f)
+        timetable_response = requests.get("%s/timetable/%s"%(url, getMac()), stream=True, verify=False)
+        
+        if timetable_response.status_code == 200:
+                with open('./Timetable.bmp', 'wb') as f:
+                        timetable_response.raw.decode_content = True
+                        f.write(timetable_response.content)
                         print('successfully updated Timetable ');
                         time.sleep(900);
-                else:
-                        print('getting Timetable failed ');
-                        authentication_request = requests.post("%s/authenticate"%(url), data={"macAdd": getMac(), "ipAdd": getIp()}, verify=False)
-                        print('authentication ');
-                        time.sleep(120)
+        else:
+                print('getting Timetable failed ');
+                authentication_request = requests.post("%s/authenticate"%(url), data={"macAdd": getMac(), "ipAdd": getIp()}, verify=False)
+                print('authentication ');
+                time.sleep(120)
