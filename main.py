@@ -35,6 +35,6 @@ while True:
                         time.sleep(900);
         else:
                 print('getting Timetable failed ');
-                authentication_request = requests.post("%s/authenticate"%(url), data={"macAdd": getMac(), "ipAdd": getIp()}, verify=False)
+                authentication_request = requests.post("%s/register"%(url), data={"macAdd": getMac(), "ipAdd": getIp()}, verify=False)
                 print('authentication ');
                 time.sleep(120)
