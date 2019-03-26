@@ -2,11 +2,6 @@ import time, socket, requests, uuid
 
 url = 'https://127.0.0.1:4000/ePaper/database/'
 
-print(r.text)
-
-# wait for 2 minutes after message: wait
-# send timetable request, if "not authenticated" resend /authenticate
-
 ################################################################################
 # Methodes
 ################################################################################
@@ -16,10 +11,8 @@ def getIp():
         IPAddr = socket.gethostbyname(hostname)
         return IPAddr
 
-def getMac():
-        mac_num = hex(uuid.getnode()).replace('0x', '').upper()
-        mac = '-'.join(mac_num[i : i + 2] for i in range(0, 11, 2))
-        return mac
+mac_num = hex(uuid.getnode()).replace('0x', '').upper()
+mac = '-'.join(mac_num[i : i + 2] for i in range(0, 11, 2))
 
 ################################################################################
 # Code
@@ -27,7 +20,7 @@ def getMac():
 
 while True:
 
-        timetable_response = requests.get("%s/timetable/%s"%(url, getMac()), stream=True, verify=False)
+        timetable_response = requests.get("%s/timetable/%s"%(url, mac), stream=True, verify=False)
         
         if timetable_response.status_code == 200:
                 with open('./Timetable.bmp', 'wb') as f:
