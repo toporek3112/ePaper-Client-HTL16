@@ -1,24 +1,45 @@
-import requests, shutil, netifaces
-netifaces.ifaddresses('enp0s3')
-ip = netifaces.ifaddresses('enp0s3')[netifaces.AF_INET][0]['addr']
-mac = netifaces.ifaddresses('enp0s3')[netifaces.AF_LINK][0]['addr']
-print(ip)
-print(mac)
+from uuid import getnode as get_mac
+import time, socket, socket, requests, shutil, uuid, json, urllib3
 
-payload = { "macAdd": mac, "ipAdd": ip}
-url = 'https://172.16.34.239:4000/ePaper/database/authenticate'
-r = requests.post(url, json=payload, verify=False)
+urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-print(r.text)
+url = 'https://10.0.0.16:4000/ePaper/database/'
 
-# wait for 2 minutes after message: wait
-# send timetable request, if "not authenticated" resend /authenticate
+################################################################################
+# Methodes
+################################################################################
+
+hostname = socket.gethostname()
+IPAddr = socket.gethostbyname(hostname)
+
+mac = get_mac()
+mac = '-'.join(("%012X" % mac)[i : i + 2] for i in range(0, 12, 2))
+
+################################################################################
+# Code
+################################################################################
 
 
-# def download_file(url):
-#     r = requests.get(url, stream=True, verify=False)
-#     with open('./Timetable.bmp', 'wb') as f:
-#         r.raw.decode_content = True
-#         shutil.copyfileobj(r.raw, f)
+while True:
+        # timetable_response = requests.get("%s/timetable/%s"%(url, getMac()), stream=True, verify=False)
+        timetable_response = requests.get(url+"timetable/:"+mac, stream=True, verify=False)
 
-# download_file(url)
+        # print(url+"timetable/:"+getMac())
+        try:
+                json_timetable_response = json.loads(timetable_response.text)
+        except:
+                print("wtf")
+        if json_timetable_response['message'] != "not registered":
+                with open('./Timetable.bmp', 'wb') as f:
+                        timetable_response.raw.decode_content = True
+                        f.write(timetable_response.content)
+                        print('successfully updated Timetable ')
+                        # time.sleep(900)
+                        time.sleep(60)
+        else:
+                print('getting Timetable failed ')
+                authentication_request = requests.post("%s/authenticate"%(url), data={"macAdd": mac, "ipAdd": IPAddr}, verify=False)
+                print('authentication ')
+                
+                # time.sleep(120)
+                time.sleep(30)
