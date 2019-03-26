@@ -1,4 +1,4 @@
-import time, socket, socket, requests, shutil, uuid
+import time, socket, requests, uuid
 
 url = 'https://127.0.0.1:4000/ePaper/database/'
 
