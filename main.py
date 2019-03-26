@@ -1,45 +1,38 @@
-from uuid import getnode as get_mac
-import time, socket, socket, requests, shutil, uuid, json, urllib3
+import time, socket, requests, uuid
 
-urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
+url = 'https://127.0.0.1:4000/ePaper/database/'
 
-url = 'https://10.0.0.16:4000/ePaper/database/'
 
 ################################################################################
 # Methodes
 ################################################################################
 
-hostname = socket.gethostname()
-IPAddr = socket.gethostbyname(hostname)
+def getIp():
+        hostname = socket.gethostname()
+        IPAddr = socket.gethostbyname(hostname)
+        return IPAddr
 
-mac = get_mac()
-mac = '-'.join(("%012X" % mac)[i : i + 2] for i in range(0, 12, 2))
+def getMac():
+        mac_num = hex(uuid.getnode()).replace('0x', '').upper()
+        mac = '-'.join(mac_num[i : i + 2] for i in range(0, 11, 2))
+        return mac
 
 ################################################################################
 # Code
 ################################################################################
 
-
 while True:
-        # timetable_response = requests.get("%s/timetable/%s"%(url, getMac()), stream=True, verify=False)
-        timetable_response = requests.get(url+"timetable/:"+mac, stream=True, verify=False)
 
-        # print(url+"timetable/:"+getMac())
-        try:
-                json_timetable_response = json.loads(timetable_response.text)
-        except:
-                print("wtf")
-        if json_timetable_response['message'] != "not registered":
+        timetable_response = requests.get("%s/timetable/%s"%(url, getMac()), stream=True, verify=False)
+        
+        if timetable_response.status_code == 200:
                 with open('./Timetable.bmp', 'wb') as f:
                         timetable_response.raw.decode_content = True
                         f.write(timetable_response.content)
-                        print('successfully updated Timetable ')
-                        # time.sleep(900)
-                        time.sleep(60)
+                        print('successfully updated Timetable ');
+                        time.sleep(900);
         else:
-                print('getting Timetable failed ')
-                authentication_request = requests.post("%s/authenticate"%(url), data={"macAdd": mac, "ipAdd": IPAddr}, verify=False)
-                print('authentication ')
-                
-                # time.sleep(120)
-                time.sleep(30)
+                print('getting Timetable failed ');
+                authentication_request = requests.post("%s/register"%(url), data={"macAdd": getMac(), "ipAdd": getIp()}, verify=False)
+                print('authentication ');
+                time.sleep(120)
