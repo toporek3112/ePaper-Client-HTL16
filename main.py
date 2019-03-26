@@ -2,6 +2,10 @@ import time, socket, requests, uuid
 
 url = 'https://127.0.0.1:4000/ePaper/database/'
 
+print(r.text)
+
+# wait for 2 minutes after message: wait
+# send timetable request, if "not authenticated" resend /authenticate
 
 ################################################################################
 # Methodes
