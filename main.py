@@ -49,13 +49,13 @@ while True:
                             f.close()
 
                         print(' [system] unzipping file')
-                        with zipfile.ZipFile("Image.zip", "r") as zip_ref:
-                           zip_ref.extractall()
-                           zip_ref.close()
-                        
+                        # with zipfile.ZipFile("Image.zip", "r") as zip_ref:
+                        #    zip_ref.extractall()
+                        #    zip_ref.close()
+                        subprocess.check_call(["unzip", "Image.zip"], stdout=DEVNULL, stderr=STDOUT)
 
                         for file in os.listdir('./'):
-                                if file.endswith('.bmp'):
+                                if file.endswith('.bmp') or file.endswith('.BMP'):
                                         print(' [system] renaming ' + file + ' to Image.bmp')
                                         os.rename('./'+file, './Image.bmp')
                                         break
