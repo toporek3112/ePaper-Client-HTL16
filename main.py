@@ -9,6 +9,7 @@ urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 url = 'https://193.170.162.23:4000/ePaper/database/'
 networks = [
         {'Name': 'projete_psk', 'Password': ''},
+        {'Name': 'Karol', 'Password': 'janina123'},
         {'Name': 'ePaperBackup', 'Password': 'Topor3112'},
         {'Name': 'UPC3984DE9', 'Password': 'Kynydats4nbp'}
 ]
@@ -20,14 +21,6 @@ connected = True
 
 mac_num = hex(uuid.getnode()).replace('0x', '').upper()
 mac = ':'.join(mac_num[i : i + 2] for i in range(0, 11, 2))
-
-def loading_animation():
-        bar = ["[|]", "[/]", "[-]", "[\]",]
-        i = 0
-        while connected:
-            print("connecting " + bar[i % len(bar)], end="\r")
-            time.sleep(.2)
-            i += 1
 
 def get_ip():
     s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
@@ -45,6 +38,8 @@ def get_ip():
 # Code
 ################################################################################
 
+time.sleep(30)
+
 print("*****************************************************************************************")
 print("*********~~~~~~~~~~*****~~~~~~~~~~***~~~~~~~~~~~~~~~~~~~***~~~~~*************************")
 print("*********\         \****\         \**\                  \**\    \************************")
@@ -60,18 +55,18 @@ print("******************~~~~~~~~~~*****~~~~~~~~~~*********~~~~~***********~~~~~
 print("*****************************************************************************************")
 
 wireless = Wireless()
-loading = threading.Thread(target=loading_animation)
-loading.start()
 
 while(True):
         for network in networks:
-                print("establishing a connection to " + network['Name'] + ' '*50)
+                print(" [WIFI] connecting to " + network['Name'] + ' '*50)
                 if wireless.connect(ssid=network['Name'], password=network['Password']):
-                        connected = False
-                        print("connection successful \n")
+                        print(" [WIFI] connection successful \n")
                         break
-                print("connection to " + network['Name'] + " failed")
+                print(" [WIFI] failure " + network['Name'])
         else:
+                print(" [system] next try to connect in 30s ")
+                time.sleep(30)
+
                 continue
         break
 
