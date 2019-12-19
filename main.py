@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-import time, uuid, subprocess, requests, urllib3, os, threading
+import time, uuid, subprocess, requests, urllib3, os, threading, socket
 from wireless import Wireless
 from subprocess import DEVNULL, STDOUT
 
@@ -28,6 +28,18 @@ def loading_animation():
             print("connecting " + bar[i % len(bar)], end="\r")
             time.sleep(.2)
             i += 1
+
+def get_ip():
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        # doesn't even have to be reachable
+        s.connect(('10.255.255.255', 1))
+        IP = s.getsockname()[0]
+    except:
+        IP = '127.0.0.1'
+    finally:
+        s.close()
+    return IP
 
 ################################################################################
 # Code
@@ -70,7 +82,7 @@ time.sleep(10)
 
 while True:
         try:
-                timetable_response = requests.get("%s/timetable/%s"%(url, mac), stream=True, verify=False)
+                timetable_response = requests.get("%s/timetable/%s/%s"%(url, mac, get_ip()), stream=True, verify=False)
                 
                 print(' [request] getting new timetable for mac ' + mac)
 
