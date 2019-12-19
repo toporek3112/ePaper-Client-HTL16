@@ -1,20 +1,67 @@
-import time, socket, uuid, subprocess, requests, urllib3, zipfile, os
+#!/usr/bin/python3
+
+import time, uuid, subprocess, requests, urllib3, os, threading
+from wireless import Wireless
 from subprocess import DEVNULL, STDOUT
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-url = 'https://127.0.0.1:4000/ePaper/database/'
+url = 'https://193.170.162.23:4000/ePaper/database/'
+networks = [
+        {'Name': 'projete_psk', 'Password': ''},
+        {'Name': 'ePaperBackup', 'Password': 'Topor3112'},
+        {'Name': 'UPC3984DE9', 'Password': 'Kynydats4nbp'}
+]
+connected = True
 
 ################################################################################
 # Methodes
 ################################################################################
 
 mac_num = hex(uuid.getnode()).replace('0x', '').upper()
-mac = '-'.join(mac_num[i : i + 2] for i in range(0, 11, 2))
+mac = ':'.join(mac_num[i : i + 2] for i in range(0, 11, 2))
+
+def loading_animation():
+        bar = ["[|]", "[/]", "[-]", "[\]",]
+        i = 0
+        while connected:
+            print("connecting " + bar[i % len(bar)], end="\r")
+            time.sleep(.2)
+            i += 1
 
 ################################################################################
 # Code
 ################################################################################
+
+print("*****************************************************************************************")
+print("*********~~~~~~~~~~*****~~~~~~~~~~***~~~~~~~~~~~~~~~~~~~***~~~~~*************************")
+print("*********\         \****\         \**\                  \**\    \************************")
+print("**********\         \****\         \**~~~~~~~     ~~~~~~~***\    \***********************")
+print("***********\         \****\         \********\    \**********\    \**********************")
+print("************\         ~~~~~          \********\    \**********\    \*********************")
+print("*************\                        \********\    \**********\    \********************")
+print("**************\         ~~~~~          \********\    \**********\    \*******************")
+print("***************\         \****\         \********\    \**********\    \******************")
+print("****************\         \****\         \********\    \**********\    \~~~~~~~ *********")
+print("*****************\         \****\         \********\    \**********\           \*********")
+print("******************~~~~~~~~~~*****~~~~~~~~~~*********~~~~~***********~~~~~~~~~~~~*********")
+print("*****************************************************************************************")
+
+wireless = Wireless()
+loading = threading.Thread(target=loading_animation)
+loading.start()
+
+while(True):
+        for network in networks:
+                print("establishing a connection to " + network['Name'] + ' '*50)
+                if wireless.connect(ssid=network['Name'], password=network['Password']):
+                        connected = False
+                        print("connection successful \n")
+                        break
+                print("connection to " + network['Name'] + " failed")
+        else:
+                continue
+        break
 
 print("Starting script...")
 print()
@@ -49,9 +96,6 @@ while True:
                             f.close()
 
                         print(' [system] unzipping file')
-                        # with zipfile.ZipFile("Image.zip", "r") as zip_ref:
-                        #    zip_ref.extractall()
-                        #    zip_ref.close()
                         subprocess.check_call(["unzip", "Image.zip"], stdout=DEVNULL, stderr=STDOUT)
 
                         for file in os.listdir('./'):
