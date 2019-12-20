@@ -34,11 +34,26 @@ def get_ip():
         s.close()
     return IP
 
+def connectToWifi():
+        while(True):
+                for network in networks:
+                        print(" [WIFI] connecting to " + network['Name'] + ' '*50)
+                        if wireless.connect(ssid=network['Name'], password=network['Password']):
+                                print(" [WIFI] connection successful \n")
+                                break
+                        print(" [WIFI] failure " + network['Name'])
+                else:
+                        print(" [system] next try to connect in 30s ")
+                        time.sleep(30)
+
+                        continue
+                break
+
 ################################################################################
 # Code
 ################################################################################
 
-time.sleep(30)
+time.sleep(10)
 
 print("*****************************************************************************************")
 print("*********~~~~~~~~~~*****~~~~~~~~~~***~~~~~~~~~~~~~~~~~~~***~~~~~*************************")
@@ -55,20 +70,7 @@ print("******************~~~~~~~~~~*****~~~~~~~~~~*********~~~~~***********~~~~~
 print("*****************************************************************************************")
 
 wireless = Wireless()
-
-while(True):
-        for network in networks:
-                print(" [WIFI] connecting to " + network['Name'] + ' '*50)
-                if wireless.connect(ssid=network['Name'], password=network['Password']):
-                        print(" [WIFI] connection successful \n")
-                        break
-                print(" [WIFI] failure " + network['Name'])
-        else:
-                print(" [system] next try to connect in 30s ")
-                time.sleep(30)
-
-                continue
-        break
+connectToWifi()
 
 print("Starting script...")
 print()
