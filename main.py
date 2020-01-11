@@ -23,7 +23,6 @@ networks = [
 connected = True
 black = lambda text: '\033[0;30m' + text + '\033[0m'
 red = lambda text: '\033[0;31m' + text + '\033[0m'
->>>>>>> b0debc5fda2e09c7eb52fa962e4983a024f7233e
 
 ################################################################################
 # Methodes
