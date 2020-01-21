@@ -8,23 +8,9 @@
             "name": "ePaper Client",
             "type": "python",
             "request": "launch",
-<<<<<<< HEAD
             "program": "${file}",
             "console": "integratedTerminal",
             "args": ["367", " "]
         } 
-=======
-            "program": "${workspaceFolder}/main.py",
-            "pythonPath": "/usr/bin/python3",
-            "console": "integratedTerminal"
-        },
-        {
-            "name": "ePaper Client external",
-            "type": "python",
-            "request": "launch",
-            "program": "${file}",
-            "console": "externalTerminal"
-        }
->>>>>>> b0debc5fda2e09c7eb52fa962e4983a024f7233e
     ]
 }
