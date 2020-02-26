@@ -4,7 +4,7 @@ from subprocess import DEVNULL, STDOUT
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 url = 'https://10.59.97.25:4000/ePaper/database/'
-#!/usr/bin/python3
+#!/usr/bin/python3 
 
 import time, uuid, subprocess, requests, urllib3, os, threading, socket
 from termcolor import colored
