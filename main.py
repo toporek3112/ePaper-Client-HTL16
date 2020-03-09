@@ -80,47 +80,12 @@ print("*************************************************************************
 wireless = Wireless()
 #connectToWifi()
 
+time.sleep(5)
 print("Starting script...")
 print()
 
-time.sleep(10)
 
 while True:
-        timetable_response = requests.get("%s/timetable/%s"%(url, mac), stream=True, verify=False)
-        
-        if timetable_response.status_code == 200:
-                print('[RETURN CODE 200]')
-                print('Processing .zip file ...')
-                
-                print('Removing old .zip and .bmp ...')
-                os.remove('Timetable.zip')
-                for file in os.listdir('./'):
-                        if file.endswith('.bmp'):
-                                os.remove(file)
-                                
-                with open('./Timetable.zip', 'wb') as f:
-                        timetable_response.raw.decode_content = True
-                        f.write(timetable_response.content)
-                        zipfile.ZipFile('./Timetable.zip').extractall('./')
-                        print('Successfully unzipped Timetable!')
-        
-                        dir_array = os.listdir('./')
-                        for file in dir_array:
-                                if file.endswith('.bmp'):
-                                        os.rename(file, 'Timetable.bmp')
-                                        break
-
-                        print('Refreshing ePaper-Image ...')
-                        subprocess.check_call(["/home/pi/Desktop/IT8951/IT8951", "0", "0", "./Timetable.bmp"], stdout=DEVNULL, stderr=STDOUT)
-
-                        print()
-                        time.sleep(30)
-        else:
-                print('[RETURN CODE 403] Access denied, admin must authorize this device MAC', mac);
-                authentication_request = requests.post("%s/register"%(url), data={"macAdd": mac, "ipAdd": getIp()}, verify=False)
-
-                print()
-                time.sleep(30)
         try:
                 timetable_response = requests.get("%s/timetable/%s/%s"%(url, mac, get_ip()), stream=True, verify=False)
                 
@@ -170,7 +135,7 @@ while True:
                         print()
                         time.sleep(30)
         except Exception as e:
-                print("[ERROR] Script will restart due to the following Exception: ")
+                print("[ERROR]")
                 print(e)
                 
                 print()
