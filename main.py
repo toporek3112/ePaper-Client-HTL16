@@ -131,6 +131,9 @@ while True:
         except Exception as e:
                 print("[ERROR]")
                 print(e)
+
+                with open("/bin/ePaperLog.txt", 'a') as f:
+                        f.write(str(time.time()) + ": " + e)
                 
                 print()
                 time.sleep(30)
