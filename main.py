@@ -1,13 +1,15 @@
-#!/usr/bin/python3 
+#!/usr/bin/env python3 
 
-import time, uuid, subprocess, requests, urllib3, os, threading, socket
+import time, uuid, subprocess, requests, urllib3, os, threading, socket, traceback
 from termcolor import colored
 from wireless import Wireless
 from subprocess import DEVNULL, STDOUT
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-url = 'https://193.170.162.23:4000/ePaper/database/'
+path = '/bin/ePaper-Client-HTL16/'
+log = open("/root/ePaperScript.log", "w")
+url = 'https://192.168.43.247:4000/ePaper/database/'
 networks = [
         {'Name': 'projete_psk', 'Password': ''},
         {'Name': 'Karol', 'Password': 'janina123'},
@@ -74,7 +76,7 @@ print("*************************************************************************
 wireless = Wireless()
 #connectToWifi()
 
-time.sleep(5)
+time.sleep(10)
 print("Starting script...")
 print()
 
@@ -89,35 +91,34 @@ while True:
                         print(' [request] successful')
 
                         print(' [system] removing old zip and bmp!')
-                        #print(' [system] removing old zip file')
-                        if(os.path.isfile('./Image.zip')):
-                            os.remove("Image.zip")
+                        if(os.path.isfile(path + 'Image.zip')):
+                            os.remove(path + "Image.zip")
 
-                        #print(' [system] removing old bmp file')
-                        for file in os.listdir('./'):
+                        for file in os.listdir(path + '.'):
                                 if file.endswith('.bmp'):
-                                        os.remove('./'+file)
+                                    print(path + file)
+                                    os.remove(path + file)
                                         
                         print(' [system] Successfully removed old zip and bmp!')
                         
                         print(' [system] saving new zip file')
-                        with open(os.path.abspath('Image.zip'), 'wb') as f:
+                        with open(path + 'Image.zip', 'wb') as f:
                             timetable_response.raw.decode_content = True
                             f.write(timetable_response.content) #writing Image.zip
                             f.close()
 
                         print(' [system] unzipping file')
-                        subprocess.check_call(["unzip", "Image.zip"], stdout=DEVNULL, stderr=STDOUT)
+                        subprocess.check_call(["unzip", path + "Image.zip", "-d", path], stdout=DEVNULL, stderr=STDOUT)
 
-                        for file in os.listdir('./'):
+                        for file in os.listdir(path + '.'):
                                 if file.endswith('.bmp') or file.endswith('.BMP'):
                                         print(' [system] renaming ' + file + ' to Image.bmp')
-                                        os.rename('./'+file, './Image.bmp')
+                                        os.rename( path +file, path + 'Image.bmp')
                                         break
 
                         print(' [ePaper] refreshing ePaper')
                         
-                        subprocess.check_call(["/home/pi/Desktop/IT8951/IT8951", "0", "0", "./Image.bmp"], stdout=DEVNULL, stderr=STDOUT)
+                        subprocess.check_call(["/bin/IT8951/IT8951", "0", "0", path + "Image.bmp"], stdout=DEVNULL, stderr=STDOUT)
                         print(' [ePaper] successfully refreshed')
                         
                         print()
@@ -131,9 +132,11 @@ while True:
         except Exception as e:
                 print("[ERROR]")
                 print(e)
+               
+                #with open("/root/ePaperScript.log") as f:
+                #    f.write(str(e))
+    
+                traceback.print_exc(file=log)
 
-                with open("/bin/ePaperLog.txt", 'a') as f:
-                        f.write(str(time.time()) + ": " + e)
-                
                 print()
                 time.sleep(30)
