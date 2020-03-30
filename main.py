@@ -5,6 +5,7 @@ from termcolor import colored
 from wireless import Wireless
 from subprocess import DEVNULL, STDOUT
 
+#This is a test
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 path = '/bin/ePaper-Client-HTL16/'
