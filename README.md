@@ -1,4 +1,5 @@
 # ePaper-Client-HTL16
-Repository for the needed client script(s), as well as the upcomming (pre) configured image for the raspberry pi
+Just for a school projtect :) 
 
-Hier kann man erklären wie das Script funktioniert 
+If you have any suggestions or you think that something can be done better in my code,
+fell free to contact me.
