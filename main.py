@@ -12,9 +12,7 @@ log = open("/root/ePaperScript.log", "w")
 url = 'https://192.168.43.247:4000/ePaper/database/'
 networks = [
         {'Name': 'projete_psk', 'Password': ''},
-        {'Name': 'Karol', 'Password': 'janina123'},
-        {'Name': 'ePaperBackup', 'Password': 'Topor3112'},
-        {'Name': 'UPC3984DE9', 'Password': 'Kynydats4nbp'}
+        {'Name': 'ePaperBackup', 'Password': ''}
 ]
 connected = True
 black = lambda text: '\033[0;30m' + text + '\033[0m'
