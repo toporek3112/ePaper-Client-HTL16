@@ -7,7 +7,7 @@ from subprocess import DEVNULL, STDOUT
 
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
-path = '/bin/ePaper-Client-HTL16/'
+path = '/home/ePaper/Documents'
 log = open("/root/ePaperScript.log", "w")
 url = 'https://192.168.43.247:4000/ePaper/database/'
 networks = [
